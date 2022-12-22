@@ -2,13 +2,13 @@ import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 
 interface Props extends PropsWithChildren {
-  onClick?(): void;
+  onClick?: React.FormEventHandler<HTMLButtonElement>;
   loading?: boolean;
 }
 
 const Submit: React.FC<Props> = ({ children, onClick, loading }) => {
   return (
-    <Container disabled={loading} onClick={onClick}>
+    <Container disabled={loading} onSubmit={onClick}>
       {children}
     </Container>
   );

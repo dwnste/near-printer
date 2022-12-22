@@ -3,6 +3,8 @@ import React, {
   useCallback,
   forwardRef,
   ForwardRefRenderFunction,
+  SyntheticEvent,
+  ChangeEvent,
 } from "react";
 import styled from "styled-components";
 
@@ -54,12 +56,14 @@ const WalletInput: ForwardRefRenderFunction<HTMLInputElement, Props> = (
     </Form>
   );
 
-  function handleSubmitCallback(e?: any) {
+  function handleSubmitCallback(e: SyntheticEvent) {
     e.preventDefault();
     onSubmit(walletId);
   }
 
-  function handleChangeCallback({ target: { value } }: any) {
+  function handleChangeCallback({
+    target: { value },
+  }: ChangeEvent<HTMLInputElement>) {
     setWalletId(value);
   }
 };
