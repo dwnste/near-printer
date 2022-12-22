@@ -1,4 +1,5 @@
 # [near-printer](https://near-printer.vercel.app/)
+Get 200 NEAR to your testnet NEAR Wallet address
 
 ## Development
 Run
