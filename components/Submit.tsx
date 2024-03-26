@@ -6,7 +6,7 @@ interface Props extends PropsWithChildren {
   loading?: boolean;
 }
 
-const Submit: React.FC<Props> = ({ children, onClick, loading }) => {
+export const Submit: React.FC<Props> = ({ children, onClick, loading }) => {
   return (
     <Container disabled={loading} onSubmit={onClick}>
       {children}
@@ -24,9 +24,7 @@ const Container = styled.button.attrs({
   border: none;
   outline: none;
   box-shadow: none;
-  font-size: 20px;
-  font-family: sans-serif;
-  font-weight: bold;
+  font-size: 16px;
 
   &:hover,
   &:focus {
@@ -37,5 +35,3 @@ const Container = styled.button.attrs({
     background-color: hsla(0, 0%, 100%, 0.2);
   }
 `;
-
-export default Submit;

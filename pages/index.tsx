@@ -1,15 +1,13 @@
 import Head from "next/head";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
 
-import useNear from "../hooks/useNear";
-import queryAccountById from "../api/queryAccountById";
-import { generateAccountId } from "../utils";
-
-import Header from "../components/Header";
-import WalletForm from "../components/WalletForm";
-import Transaction from "../components/Transaction";
+import { NearContext } from "../components/NearProvider";
+import { Header } from "../components/Header";
+import { WalletForm } from "../components/WalletForm";
+import { Transaction } from "../components/Transaction";
+import { Footer } from "../components/Footer";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -19,11 +17,13 @@ export default function Home() {
     loading: isNearConnecting,
     createDevAccount,
     deleteAccount,
-  } = useNear();
+    checkAccount,
+  } = useContext(NearContext);
 
   const handleSubmit = useCallback(handleSubmitCallback, [
     createDevAccount,
     deleteAccount,
+    checkAccount,
   ]);
 
   useEffect(handleAutoFocus, [loading, isNearConnecting]);
@@ -31,8 +31,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>NEAR printer (testnet)</title>
-        <meta name="description" content="NEAR printer (testnet)" />
+        <title>NEAR printer for testnet</title>
+        <meta name="description" content="NEAR printer for testnet" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -46,6 +46,7 @@ export default function Home() {
           />
         </Content>
       </Main>
+      <Footer />
       <ToastContainer newestOnTop closeOnClick={false} theme="colored" />
     </>
   );
@@ -58,21 +59,26 @@ export default function Home() {
 
   async function handleSubmitCallback(walletId: string) {
     setLoading(true);
+
     const toastLoadingId = toast.loading("Topping up the balance...", {
-      position: toast.POSITION.BOTTOM_CENTER,
+      position: "bottom-center",
     });
 
     try {
-      await queryAccountById(walletId);
+      await checkAccount(walletId);
 
-      const accountId = await createDevAccount(generateAccountId());
+      const randomNumber = Math.floor(
+        Math.random() * (99999999999999 - 10000000000000) + 10000000000000,
+      );
+      const accountId = `dev-${Date.now()}-${randomNumber}.testnet`;
+      await createDevAccount(accountId);
       toast.info(
         <>
           Dev account with id <b>{accountId}</b> is created
         </>,
         {
-          position: toast.POSITION.BOTTOM_CENTER,
-        }
+          position: "bottom-center",
+        },
       );
 
       const transactionId = await deleteAccount(accountId, walletId);
@@ -81,27 +87,27 @@ export default function Home() {
           Dev account (<b>{accountId}</b>) is deleted
         </>,
         {
-          position: toast.POSITION.BOTTOM_CENTER,
-        }
+          position: "bottom-center",
+        },
       );
 
       toast.success(
         <>
           Added <b>200 NEAR</b> to{" "}
           <Transaction
-            href={`https://explorer.testnet.near.org/transactions/${transactionId}`}
+            href={`${process.env.EXPLORER_TX_ID_URL}/${transactionId}`}
           >
             {walletId}
           </Transaction>
         </>,
         {
-          position: toast.POSITION.BOTTOM_CENTER,
+          position: "bottom-center",
           autoClose: 20000,
-        }
+        },
       );
     } catch (error: any) {
       toast.error(error.toString(), {
-        position: toast.POSITION.BOTTOM_CENTER,
+        position: "bottom-center",
         autoClose: 20000,
       });
     } finally {
@@ -116,6 +122,7 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
 `;
 
 const Content = styled.div`

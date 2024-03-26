@@ -5,7 +5,7 @@ interface Props extends PropsWithChildren {
   href?: string;
 }
 
-const Transaction: React.FC<Props> = ({ children, href }) => {
+export const Transaction: React.FC<Props> = ({ children, href }) => {
   return <Container href={href}>{children}</Container>;
 };
 
@@ -15,5 +15,3 @@ const Container = styled.a.attrs({
   text-decoration: underline;
   font-weight: bold;
 `;
-
-export default Transaction;
