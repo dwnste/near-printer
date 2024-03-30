@@ -1,5 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const withPWA = require("next-pwa")({
+  dest: "public",
+});
+
+module.exports = withPWA({
   env: {
     NEAR_NO_LOGS: "true",
     MANUAL_BALANCE_TOP_UP_GUIDE_URL: "https://stackoverflow.com/a/71869002",
@@ -14,6 +17,4 @@ const nextConfig = {
     locales: ["en"],
     defaultLocale: "en",
   },
-};
-
-module.exports = nextConfig;
+});
