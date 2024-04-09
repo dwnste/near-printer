@@ -93,7 +93,7 @@ export default function Home() {
 
       toast.success(
         <>
-          Added <b>200 NEAR</b> to{" "}
+          Added <b>10 NEAR</b> to{" "}
           <Transaction
             href={`${process.env.EXPLORER_TX_ID_URL}/${transactionId}`}
           >

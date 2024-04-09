@@ -35,7 +35,7 @@ export const WalletForm = forwardRef<HTMLInputElement, Props>(
         />
         <Actions>
           <Submit loading={loading} onClick={handleSubmit}>
-            Print 200Ⓝ
+            Print 10 NEAR
           </Submit>
           <Link
             title="Link to the guide on manual balance top up"
